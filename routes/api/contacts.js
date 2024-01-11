@@ -1,6 +1,6 @@
 // @ts-nocheck
 const express = require("express");
-const {getAll} = require('../../controllers/contacts');
+const {getAll, add} = require('../../controllers/contacts');
 // const {validateBody} = require('../../middlewares');
 // const {addSchema} = require('../../schemas/contacts');
 
@@ -10,7 +10,7 @@ router.get("/", getAll);
 
 // router.get("/:contactId", getById);
 
-// router.post("/", validateBody(addSchema), add);
+router.post("/", add);
 
 // router.delete("/:contactId", deleteContact);
 

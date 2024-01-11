@@ -1,9 +1,9 @@
 // @ts-nocheck
 const { ctrlWrapper } = require("../helpers");
-const Book = require("../models/contact")
+const Contact = require("../models/contact")
 
 const getAll = async (req, res) => {
-  const result = await Book.find();
+  const result = await Contact.find();
   res.json(result);
 };
 
@@ -16,10 +16,10 @@ const getAll = async (req, res) => {
 //   res.json(result);
 // };
 
-// const add = async (req, res) => {
-//   const result = await addContact(req.body);
-//   res.status(201).json(result);
-// };
+const add = async (req, res) => {
+  const result = await Contact.create(req.body);
+  res.status(201).json(result);
+};
 
 // const deleteContact = async (req, res) => {
 //   const { contactId } = req.params;
@@ -44,7 +44,7 @@ const getAll = async (req, res) => {
 module.exports = {
   getAll: ctrlWrapper(getAll),
   // getById: ctrlWrapper(getById),
-  // add: ctrlWrapper(add),
+  add: ctrlWrapper(add),
   // deleteContact: ctrlWrapper(deleteContact),
   // update: ctrlWrapper(update),
 };
