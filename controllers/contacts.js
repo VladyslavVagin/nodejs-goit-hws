@@ -1,9 +1,13 @@
 // @ts-nocheck
 const { ctrlWrapper, HttpError } = require("../helpers");
-const {Contact} = require("../models/contact")
+const { Contact } = require("../models/contact");
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, favorite } = req.query;
+  const skip = (page - 1) * limit;
+  const query = favorite !== undefined ? {owner, favorite} : {owner};
+  const result = await Contact.find(query, "-owner", { skip, limit }); // .populate("owner", "name email"); для розширеної відповіді з інформацією про user
   res.json(result);
 };
 
@@ -17,7 +21,8 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
@@ -34,7 +39,9 @@ const deleteContact = async (req, res) => {
 
 const update = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -43,7 +50,9 @@ const update = async (req, res) => {
 
 const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!result) {
     throw HttpError(404, "Not found");
   }
