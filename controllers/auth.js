@@ -69,6 +69,9 @@ const updateSubscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
+   if (!req.file) {
+    throw HttpError(400, "File was not found");
+  }
   const { _id } = req.user;
   const { path: tmpUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
