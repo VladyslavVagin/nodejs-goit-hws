@@ -61,6 +61,10 @@ const registerSchema = Joi.object({
   password: Joi.string().pattern(passwordRegexp).min(6).required().messages({'string.pattern.base': 'Password must contain at least one digit, one uppercase letter, one lowercase letter, one special character, and be at least 6 characters long'}),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required()
+})
+
 const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().pattern(passwordRegexp).min(6).required(),
@@ -70,7 +74,7 @@ const subscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
-const schemas = { registerSchema, loginSchema, subscriptionSchema };
+const schemas = { registerSchema, loginSchema, subscriptionSchema, emailSchema };
 
 const User = model("user", userSchema);
 
