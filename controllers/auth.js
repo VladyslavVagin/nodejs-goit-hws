@@ -60,7 +60,7 @@ const resendValidateEmail = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    throw HttpError(400, "missing required field email");
+    throw HttpError(404, "Not found");
   }
   if (user.verify) {
     throw HttpError(400, "Verification has already been passed");
@@ -96,7 +96,7 @@ const login = async (req, res) => {
   // @ts-ignore
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
   await User.findByIdAndUpdate(user._id, { token });
-  res.json({ token, _id: user._id });
+  res.json({ token, name: user.name, email: user.email, _id: user._id });
 };
 
 const getCurrent = async (req, res) => {
